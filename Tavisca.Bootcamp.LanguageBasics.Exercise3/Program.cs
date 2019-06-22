@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
@@ -41,6 +42,126 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static int[] SelectMeals(int[] protein, int[] carbs, int[] fat, string[] dietPlans)
         {
             // Add your code here.
+            int[] solution = new int[dietPlans.Length];
+            int[] calculateCalories = new int[fat.Length];
+            for (int i = 0; i < fat.Length; i++)
+            {
+                calculateCalories[i] = carbs[i] * 5 + protein[i] * 5 + fat[i] * 9;
+            }
+            for(int i=0;i < dietPlans.Length; i++)
+            {
+                if (dietPlans.Length == 0)
+                    continue;
+                List<int> calculateDishWithLessValueList = new List<int>();
+                List<int> calculateDishWithLessValueListTemp = new List<int>();
+                for (int j = 0; j < protein.Length; j++)
+                    calculateDishWithLessValueListTemp.Add(j);
+                for (int j= 0; j < dietPlans[i].Length; j++)
+                {
+                    int max = int.MinValue;
+                    int min = int.MaxValue;
+                    switch (dietPlans[i][j])
+                    {
+                        case 'P':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                max = Math.Max(max, protein[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (max == protein[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 'C':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                max = Math.Max(max, carbs[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (max == carbs[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 'F':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                max = Math.Max(max, fat[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (max == fat[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 'T':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                max = Math.Max(max, calculateCalories[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (max == calculateCalories[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 'p':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                min = Math.Min(min, protein[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (min == protein[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 'c':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                min = Math.Min(min, carbs[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (min == carbs[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 'f':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                min = Math.Min(min, fat[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (min == fat[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                        case 't':
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                min = Math.Min(min, calculateCalories[k]);
+                            }
+                            foreach (int k in calculateDishWithLessValueListTemp)
+                            {
+                                if (min == calculateCalories[k])
+                                    calculateDishWithLessValueList.Add(k);
+                            }
+                            break;
+                    }
+                    calculateDishWithLessValueListTemp = calculateDishWithLessValueList;
+                    calculateDishWithLessValueList = new List<int>();
+                    if (calculateDishWithLessValueList.Count == 1)
+                    {
+                        break;
+                    }
+                    
+                }
+                solution[i] = calculateDishWithLessValueListTemp[0];
+            }
+            return solution;
             throw new NotImplementedException();
         }
     }
