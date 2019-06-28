@@ -43,19 +43,13 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             // Add your code here.
             int[] solution = new int[dietPlans.Length];
-            int[] calculateCalories = new int[fat.Length];
-            for (int i = 0; i < fat.Length; i++)
-            {
-                calculateCalories[i] = carbs[i] * 5 + protein[i] * 5 + fat[i] * 9;
-            }
-            for(int i=0;i < dietPlans.Length; i++)
+            int[] calculateCalories = CalculateCalories(carbs, protein, fat);
+            for (int i=0;i < dietPlans.Length; i++)
             {
                 if (dietPlans.Length == 0)
                     continue;
-                List<int> calculateDishWithLessValueList = new List<int>();
-                List<int> calculateDishWithLessValueListTemp = new List<int>();
-                for (int j = 0; j < protein.Length; j++)
-                    calculateDishWithLessValueListTemp.Add(j);
+                List<int> dishIndexWithLessValue = new List<int>();
+                List<int> indexValue = addingAllIndexToList(protein.Length);
                 for (int j= 0; j < dietPlans[i].Length; j++)
                 {
                     int max = int.MinValue;
@@ -63,106 +57,85 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     switch (dietPlans[i][j])
                     {
                         case 'P':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                max = Math.Max(max, protein[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (max == protein[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            max = AddMaximumValueToList(indexValue, max, protein, dishIndexWithLessValue);
                             break;
                         case 'C':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                max = Math.Max(max, carbs[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (max == carbs[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            max = AddMaximumValueToList(indexValue, max, carbs, dishIndexWithLessValue);
                             break;
                         case 'F':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                max = Math.Max(max, fat[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (max == fat[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            max = AddMaximumValueToList(indexValue, max, fat, dishIndexWithLessValue);
                             break;
                         case 'T':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                max = Math.Max(max, calculateCalories[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (max == calculateCalories[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            max = AddMaximumValueToList(indexValue, max, calculateCalories, dishIndexWithLessValue);
                             break;
                         case 'p':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                min = Math.Min(min, protein[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (min == protein[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            min = AddMinimumValueToList(indexValue, min, protein, dishIndexWithLessValue);
                             break;
                         case 'c':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                min = Math.Min(min, carbs[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (min == carbs[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            min = AddMinimumValueToList(indexValue, min, carbs, dishIndexWithLessValue);
                             break;
                         case 'f':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                min = Math.Min(min, fat[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (min == fat[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            min = AddMinimumValueToList(indexValue, min, fat, dishIndexWithLessValue);
                             break;
                         case 't':
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                min = Math.Min(min, calculateCalories[k]);
-                            }
-                            foreach (int k in calculateDishWithLessValueListTemp)
-                            {
-                                if (min == calculateCalories[k])
-                                    calculateDishWithLessValueList.Add(k);
-                            }
+                            min = AddMinimumValueToList(indexValue, min, calculateCalories, dishIndexWithLessValue);
                             break;
                     }
-                    calculateDishWithLessValueListTemp = calculateDishWithLessValueList;
-                    calculateDishWithLessValueList = new List<int>();
-                    if (calculateDishWithLessValueList.Count == 1)
+                    indexValue = dishIndexWithLessValue;
+                    dishIndexWithLessValue = new List<int>();
+                    if (dishIndexWithLessValue.Count == 1)
                     {
                         break;
                     }
                     
                 }
-                solution[i] = calculateDishWithLessValueListTemp[0];
+                solution[i] = indexValue[0];
             }
             return solution;
-            throw new NotImplementedException();
+        }
+        private static int[] CalculateCalories(int[] carbs, int[] protein, int[] fat)
+        {
+            int[] calculatedCalories = new int[fat.Length];
+            for (int i = 0; i < fat.Length; i++)
+            {
+                calculatedCalories[i] = carbs[i] * 5 + protein[i] * 5 + fat[i] * 9;
+            }
+            return calculatedCalories;
+        }
+        private static List<int> addingAllIndexToList(int length)
+        {
+            List<int> temp = new List<int>();
+            for (int i = 0; i < length; i++)
+            {
+                temp.Add(i);
+            }
+            return temp;
+        }
+        private static int AddMaximumValueToList(List<int> index, int max, int[] dishValue, List<int> dishWithLessValue)
+        {
+            foreach (int k in index)
+            {
+                max = Math.Max(max, dishValue[k]);
+            }
+            foreach (int k in index)
+            {
+                if (max == dishValue[k])
+                    dishWithLessValue.Add(k);
+            }
+            return max;
+        }
+        private static int AddMinimumValueToList(List<int> index,int min, int[] dishValue, List<int> dishWithLessValue)
+        {
+            foreach (int k in index)
+            {
+                min = Math.Min(min, dishValue[k]);
+            }
+            foreach (int k in index)
+            {
+                if (min == dishValue[k])
+                    dishWithLessValue.Add(k);
+            }
+            return min;
         }
     }
 }
