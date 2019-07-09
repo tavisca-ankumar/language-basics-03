@@ -48,37 +48,45 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             {
                 if (dietPlans.Length == 0)
                     continue;
+                /*Storing those dishes having smallest value of either protein
+                 *or fat or carbs or calories
+                 */
                 List<int> dishIndexWithLessValue = new List<int>();
+                /*when two dish with same value is selected then to 
+                *consider only those two dish "indexValue" is created
+                */
                 List<int> indexValue = addingAllIndexToList(protein.Length);
                 for (int j= 0; j < dietPlans[i].Length; j++)
                 {
                     int max = int.MinValue;
                     int min = int.MaxValue;
-                    switch (dietPlans[i][j])
+                    //i=fetch string in array("tFc")
+                    //j =char in string('t','f',c'')
+                    switch (dietPlans[i][j]) 
                     {
                         case 'P':
-                            max = AddMaximumValueToList(indexValue, max, protein, dishIndexWithLessValue);
+                            max = AddMaximumDishValueToList(indexValue, max, protein, dishIndexWithLessValue);
                             break;
                         case 'C':
-                            max = AddMaximumValueToList(indexValue, max, carbs, dishIndexWithLessValue);
+                            max = AddMaximumDishValueToList(indexValue, max, carbs, dishIndexWithLessValue);
                             break;
                         case 'F':
-                            max = AddMaximumValueToList(indexValue, max, fat, dishIndexWithLessValue);
+                            max = AddMaximumDishValueToList(indexValue, max, fat, dishIndexWithLessValue);
                             break;
                         case 'T':
-                            max = AddMaximumValueToList(indexValue, max, calculateCalories, dishIndexWithLessValue);
+                            max = AddMaximumDishValueToList(indexValue, max, calculateCalories, dishIndexWithLessValue);
                             break;
                         case 'p':
-                            min = AddMinimumValueToList(indexValue, min, protein, dishIndexWithLessValue);
+                            min = AddMinimumDishValueToList(indexValue, min, protein, dishIndexWithLessValue);
                             break;
                         case 'c':
-                            min = AddMinimumValueToList(indexValue, min, carbs, dishIndexWithLessValue);
+                            min = AddMinimumDishValueToList(indexValue, min, carbs, dishIndexWithLessValue);
                             break;
                         case 'f':
-                            min = AddMinimumValueToList(indexValue, min, fat, dishIndexWithLessValue);
+                            min = AddMinimumDishValueToList(indexValue, min, fat, dishIndexWithLessValue);
                             break;
                         case 't':
-                            min = AddMinimumValueToList(indexValue, min, calculateCalories, dishIndexWithLessValue);
+                            min = AddMinimumDishValueToList(indexValue, min, calculateCalories, dishIndexWithLessValue);
                             break;
                     }
                     indexValue = dishIndexWithLessValue;
@@ -89,10 +97,15 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                     }
                     
                 }
+                /*if  two dishes with same value is in list then
+                * the dish with lower index value is the answer
+                */
                 solution[i] = indexValue[0];
             }
             return solution;
         }
+
+        // calculating calories for the particular dish
         private static int[] CalculateCalories(int[] carbs, int[] protein, int[] fat)
         {
             int[] calculatedCalories = new int[fat.Length];
@@ -111,7 +124,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             return temp;
         }
-        private static int AddMaximumValueToList(List<int> index, int max, int[] dishValue, List<int> dishWithLessValue)
+        /*if two dish with maximum value of carbs is selected
+         * then both dish will be added to the list so that for the 
+         * next priority only these dishes are considered
+         */
+        private static int AddMaximumDishValueToList(List<int> index, int max, int[] dishValue, List<int> dishWithLessValue)
         {
             foreach (int k in index)
             {
@@ -124,7 +141,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             }
             return max;
         }
-        private static int AddMinimumValueToList(List<int> index,int min, int[] dishValue, List<int> dishWithLessValue)
+        /*if two dish with minimum value of carbs is selected
+         * then both dish will be added to the list so that for
+         * the next priority these dishes are considered
+         */
+        private static int AddMinimumDishValueToList(List<int> index,int min, int[] dishValue, List<int> dishWithLessValue)
         {
             foreach (int k in index)
             {
